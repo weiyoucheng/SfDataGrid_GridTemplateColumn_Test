@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "SfDataGridTest (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "SfDataGridTest (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

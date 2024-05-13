@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="SfDataGridTest.Views.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:SfDataGridTest.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:SfDataGridTest.ViewModels"
+    xmlns:dataGrid="using:CommunityToolkit.WinUI.UI.Controls"
+    xmlns:sfDataGrid="using:Syncfusion.UI.Xaml.DataGrid"
+    xmlns:sfEditors="using:Syncfusion.UI.Xaml.Editors"
+    xmlns:ui="using:CommunityToolkit.WinUI"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid ColumnSpacing="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="48"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" FontWeight="Bold">DataGrid</TextBlock>
+        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" FontWeight="Bold" Grid.Column="1">SfDataGrid</TextBlock>
+        <dataGrid:DataGrid Grid.Row="1" 
+                           AutoGenerateColumns="False" ItemsSource="{x:Bind ViewModel.Users}" IsReadOnly="False">
+            <dataGrid:DataGrid.Columns>
+                <dataGrid:DataGridTextColumn Header="Id" Binding="{Binding Id}"/>
+                <dataGrid:DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
+                <dataGrid:DataGridTextColumn Header="Phone" Binding="{Binding Phone}"/>
+                <dataGrid:DataGridTextColumn Header="Email" Binding="{Binding Email}"/>
+                <dataGrid:DataGridTemplateColumn Header="Department" IsReadOnly="False">
+                    <dataGrid:DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Department.Name}" VerticalAlignment="Center"/>
+                        </DataTemplate>
+                    </dataGrid:DataGridTemplateColumn.CellTemplate>
+                    <dataGrid:DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <!-- When using the DataGrid from CommunityToolkit, the target property bound to SelectedItem is not null. -->
+                            <sfEditors:SfComboBox ItemsSource="{Binding (ui:FrameworkElementExtensions.Ancestor).ViewModel.Departments,RelativeSource={RelativeSource Mode=Self}}"
+                                    SelectedItem="{Binding Department,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                    ui:FrameworkElementExtensions.AncestorType="local:MainPage"
+                                    IsEditable="True" IsFilteringEnabled="True" PlaceholderText="请输入内容" HorizontalAlignment="Stretch"
+                                    TextHighlightMode="Matched" TextSearchMode="Contains" DisplayMemberPath="Name" TextMemberPath="Name"/>
+                        </DataTemplate>
+                    </dataGrid:DataGridTemplateColumn.CellEditingTemplate>
+                </dataGrid:DataGridTemplateColumn>
+            </dataGrid:DataGrid.Columns>
+        </dataGrid:DataGrid>
+
+        <sfDataGrid:SfDataGrid Grid.Row="1" Grid.Column="1"
+                               AutoGenerateColumns="False" ItemsSource="{x:Bind ViewModel.Users}" IsReadOnly="False">
+            <sfDataGrid:SfDataGrid.Columns>
+                <sfDataGrid:GridTextColumn HeaderText="Id" ValueBinding="{Binding Id}"/>
+                <sfDataGrid:GridTextColumn HeaderText="Name" ValueBinding="{Binding Name}"/>
+                <sfDataGrid:GridTextColumn HeaderText="Phone" ValueBinding="{Binding Phone}"/>
+                <sfDataGrid:GridTextColumn HeaderText="Email" ValueBinding="{Binding Email}"/>
+                <sfDataGrid:GridTemplateColumn HeaderText="Department" MappingName="Id" AllowEditing="True">
+                    <sfDataGrid:GridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Department.Name}" VerticalAlignment="Center"/>
+                        </DataTemplate>
+                    </sfDataGrid:GridTemplateColumn.CellTemplate>
+                    <sfDataGrid:GridTemplateColumn.EditTemplate>
+                        <DataTemplate>
+                            <!-- When binding to a property of an ancestor control using CommunityToolkit.WinUI.FrameworkElementExtensions,
+                                 the target property bound to SelectedItem is always null.-->
+                            <sfEditors:SfComboBox ItemsSource="{Binding (ui:FrameworkElementExtensions.Ancestor).ViewModel.Departments,RelativeSource={RelativeSource Mode=Self}}"
+                                SelectedItem="{Binding Department,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                ui:FrameworkElementExtensions.AncestorType="local:MainPage"
+                                IsEditable="True" IsFilteringEnabled="True" PlaceholderText="请输入内容" HorizontalAlignment="Stretch"
+                                TextHighlightMode="Matched" TextSearchMode="Contains" DisplayMemberPath="Name" TextMemberPath="Name"/>
+                            
+                            <!-- Using the following method does not cause any issues. -->
+                            
+                            <!--<sfEditors:SfComboBox ItemsSource="{Binding Source={StaticResource GlobalContext},Path=Data.Departments}"
+                                SelectedItem="{Binding Department,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                ui:FrameworkElementExtensions.AncestorType="sfDataGrid:SfDataGrid"
+                                IsEditable="True" IsFilteringEnabled="True" PlaceholderText="请输入内容" HorizontalAlignment="Stretch"
+                                TextHighlightMode="Matched" TextSearchMode="Contains" DisplayMemberPath="Name" TextMemberPath="Name"/>-->
+                        </DataTemplate>
+                    </sfDataGrid:GridTemplateColumn.EditTemplate>
+                </sfDataGrid:GridTemplateColumn>
+            </sfDataGrid:SfDataGrid.Columns>
+        </sfDataGrid:SfDataGrid>
+
+    </Grid>
+</Page>
