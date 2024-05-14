@@ -18,13 +18,14 @@ namespace SfDataGridTest.ViewModels {
         private IList<Department> _departments;
 
         public MainPageViewModel() {
-            _departments = new Department[] {
+            GlobalContext.Data.Departments = new Department[] {
                 new Department(1,"CustomerService"),
                 new Department(2,"Finance"),
                 new Department(3,"Personnel"),
                 new Department(4,"Business"),
                 new Department(5,"Sales")
             };
+            _departments = GlobalContext.Data.Departments;
 
             _users = new User[]{
                 new User(1,"Alice","123456","123456@outlook.com",Departments[0]),
